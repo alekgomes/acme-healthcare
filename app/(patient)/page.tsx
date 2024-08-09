@@ -1,3 +1,5 @@
+"use client";
+
 import { PatientView } from "./patient.view";
 import { usePatientModel } from "./patient.model";
 import { PatientService } from "../services/PatientService/PatienteService.service";
