@@ -16,8 +16,7 @@ datasource db {
 
 model Patient {
   id              Int              @id @default(autoincrement())
-  name            String
-  email           String            @unique
+  name            String  
   dob             DateTime          @db.Date
   cpf             String            @unique
   sex             Sex               
@@ -40,11 +39,11 @@ model PatientRegister {
 }
 
 model Address {
-  id        Int      @id @default(autoincrement())
-  street    String
-  city      String
-  state     String
-  zipCode   String
+  id            Int      @id @default(autoincrement())
+  cep           String
+  city          String  
+  street        String
+  adressNumber  String
   patient   Patient?
 }
 

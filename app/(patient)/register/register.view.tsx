@@ -17,8 +17,9 @@ import {
 } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-import { Input, MaskedInput } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cepMask, cpfMask } from "@/lib/utils";
 
 export const ErrorMessage: React.FC<any> = ({ errors, fieldName }) => {
   if (!errors?.hasOwnProperty(fieldName)) return null;
@@ -42,6 +43,8 @@ export default function RegisterView({
   register,
   errors,
   handleOnSubmit,
+  Controller,
+  control,
 }: any) {
   console.log("ERRORS:", errors);
   return (
@@ -77,34 +80,51 @@ export default function RegisterView({
                   id="dob"
                   type="date"
                   placeholder="Data de nascimento"
-                  name="dob"
+                  {...register("dob")}
                   aria-required
                 />
                 <ErrorMessage errors={errors} fieldName="dob" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="cpf">CPF</Label>
-                <MaskedInput
-                  id="cpf"
-                  type="text"
+                <Controller
+                  control={control}
                   name="cpf"
-                  mask="999.999.999-99"
-                  placeholder="123.456.789-09"
-                  aria-required
+                  render={({ field: { onChange, onBlur, value } }: any) => (
+                    <Input
+                      id="cpf"
+                      type="text"
+                      placeholder="123.456.789-09"
+                      aria-required
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        e.target.value = cpfMask(value);
+                        onChange(e);
+                      }}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                  )}
                 />
                 <ErrorMessage errors={errors} fieldName="cpf" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="sex">Sexo</Label>
-                <Select name="sex">
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sexo" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="masc">Masculino</SelectItem>
-                    <SelectItem value="fem">Feminino</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  control={control}
+                  name="sex"
+                  render={({ field: { onChange, onBlur, value } }: any) => (
+                    <Select onValueChange={onChange} defaultValue={value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Sexo" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="MASC">Masculino</SelectItem>
+                        <SelectItem value="FEM">Feminino</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
                 <ErrorMessage errors={errors} fieldName="sex" />
               </div>
             </fieldset>
@@ -116,19 +136,46 @@ export default function RegisterView({
 
               <div className="space-y-2">
                 <Label htmlFor="cep">CEP</Label>
-                <MaskedInput
-                  id="cep"
-                  type="text"
+                <Controller
+                  control={control}
                   name="cep"
-                  mask="99999-999"
-                  placeholder="00000-000"
-                  aria-required
+                  render={({ field: { onChange, onBlur, value } }: any) => (
+                    <Input
+                      id="cpf"
+                      type="text"
+                      placeholder="00000-000"
+                      aria-required
+                      maxLength={9}
+                      onChange={(e) => {
+                        const { value } = e.target;
+                        e.target.value = cepMask(value);
+                        onChange(e);
+                      }}
+                      onBlur={onBlur}
+                      value={value}
+                    />
+                  )}
                 />
                 <ErrorMessage errors={errors} fieldName="cep" />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="city">CIdade</Label>
+                <Input
+                  id="city"
+                  type="text"
+                  {...register("city")}
+                  aria-required
+                />
+                <ErrorMessage errors={errors} fieldName="city" />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="street">Logradouro</Label>
-                <Input id="street" type="text" name="street" aria-required />
+                <Input
+                  id="street"
+                  type="text"
+                  {...register("street")}
+                  aria-required
+                />
                 <ErrorMessage errors={errors} fieldName="street" />
               </div>
               <div className="space-y-2">
@@ -136,7 +183,7 @@ export default function RegisterView({
                 <Input
                   id="adressNumber"
                   type="text"
-                  name="adressNumber"
+                  {...register("adressNumber")}
                   placeholder="123"
                   aria-required
                 />
@@ -147,26 +194,35 @@ export default function RegisterView({
             <fieldset className=" my-5">
               <legend className="text-muted-foreground text-sm">Status</legend>
               <Label>Define status inicial do paciente</Label>
-              <RadioGroup name="status" className="flex mt-2">
-                <div className="flex items-center space-x-2 ">
-                  <RadioGroupItem value="active" id="active" />
-                  <Label htmlFor="active">Ativo</Label>
-                </div>
-                <div className="flex items-center space-x-2 ">
-                  <RadioGroupItem value="inactive" id="inactive" />
-                  <Label htmlFor="inactive">Inativo</Label>
-                </div>
-              </RadioGroup>
+
+              <Controller
+                control={control}
+                name="status"
+                render={({ field: { onChange, onBlur, value } }: any) => (
+                  <RadioGroup
+                    name="status"
+                    className="flex mt-2"
+                    onValueChange={onChange}
+                    defaultValue={value}
+                  >
+                    <div className="flex items-center space-x-2 ">
+                      <RadioGroupItem value="ACTIVE" id="active" />
+                      <Label htmlFor="active">Ativo</Label>
+                    </div>
+                    <div className="flex items-center space-x-2 ">
+                      <RadioGroupItem value="INACTIVE" id="inactive" />
+                      <Label htmlFor="inactive">Inativo</Label>
+                    </div>
+                  </RadioGroup>
+                )}
+              />
+
               <ErrorMessage errors={errors} fieldName="status" />
             </fieldset>
 
             <Button className="w-full" type="submit">
               Cadastrar
             </Button>
-            {/* <Alert variant="destructive">
-              <AlertTitle>Alerta</AlertTitle>
-              <AlertDescription>Alerta</AlertDescription>
-            </Alert> */}
           </CardContent>
         </Card>
       </form>

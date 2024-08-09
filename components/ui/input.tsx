@@ -2,7 +2,6 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-import InputMask from "react-input-mask";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
@@ -22,25 +21,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
   }
 );
+
 Input.displayName = "Input";
-
-const MaskedInput = React.forwardRef<
-  HTMLInputElement,
-  InputProps & { mask: string }
->(({ className, type, mask = "", ...props }, ref) => {
-  return (
-    <InputMask
-      type={type}
-      className={cn(
-        "flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
-        className
-      )}
-      mask={mask}
-      inputRef={ref}
-      {...props}
-    />
-  );
-});
-
-MaskedInput.displayName = "MaskedInput";
-export { Input, MaskedInput };
+export { Input };

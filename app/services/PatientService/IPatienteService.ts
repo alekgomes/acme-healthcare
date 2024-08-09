@@ -1,5 +1,7 @@
+import { PatientSchema } from "@/app/(patient)/patient.model";
+
 export interface IPatientService {
-  Create: (formData: FormData) => void;
+  Create: (data: PatientSchema) => void;
   FindAll: () => Promise<any[]>; // type Pacient[]
   FindUnique: (query: any) => Promise<any>; // type Pacient
 }
