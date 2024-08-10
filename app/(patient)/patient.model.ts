@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z
@@ -38,7 +39,9 @@ export function usePatientModel(service: IPatientService) {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    setError,
+
     control,
   } = useForm<PatientSchema>({
     resolver: zodResolver(formSchema),
@@ -48,9 +51,24 @@ export function usePatientModel(service: IPatientService) {
     service.FindUnique(query);
   };
 
-  const handleOnSubmit = handleSubmit((data: PatientSchema) => {
-    service.Create(data);
+  const handleOnSubmit = handleSubmit(async (data: PatientSchema) => {
+    const res = await service.Create(data);
+    if (res.data.status === "error") {
+      if (res.data.message.includes("CPF já cadastrado")) {
+        setError("cpf", { message: res.data.message });
+      }
+    } else {
+      console.log("Paciente criado com sucesso:", res);
+    }
   });
 
-  return { findUnique, register, handleOnSubmit, errors, Controller, control };
+  return {
+    findUnique,
+    register,
+    handleOnSubmit,
+    errors,
+    isSubmitting,
+    Controller,
+    control,
+  };
 }

@@ -5,8 +5,14 @@ import RegisterView from "./register.view";
 
 function RegisterPage() {
   const patientService = new PatientService();
-  const { register, handleOnSubmit, errors, Controller, control } =
-    usePatientModel(patientService);
+  const {
+    register,
+    handleOnSubmit,
+    errors,
+    Controller,
+    control,
+    isSubmitting,
+  } = usePatientModel(patientService);
 
   return (
     <RegisterView
@@ -15,6 +21,7 @@ function RegisterPage() {
       handleOnSubmit={handleOnSubmit}
       Controller={Controller}
       control={control}
+      isSubmitting={isSubmitting}
     />
   );
 }

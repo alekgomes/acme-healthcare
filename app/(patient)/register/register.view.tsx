@@ -1,5 +1,4 @@
 "use client";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -45,6 +44,7 @@ export default function RegisterView({
   handleOnSubmit,
   Controller,
   control,
+  isSubmitting,
 }: any) {
   console.log("ERRORS:", errors);
   return (
@@ -220,8 +220,8 @@ export default function RegisterView({
               <ErrorMessage errors={errors} fieldName="status" />
             </fieldset>
 
-            <Button className="w-full" type="submit">
-              Cadastrar
+            <Button className="w-full" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Cadastrando..." : "Cadastrar"}
             </Button>
           </CardContent>
         </Card>
