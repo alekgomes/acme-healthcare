@@ -120,22 +120,35 @@ export async function POST(req: NextRequest, res: NextResponse) {
 }
 
 export async function PUT(req: NextRequest, res: NextResponse) {
-  console.log("CHEGOU");
-  const { searchParams } = new URL(req.url);
-
-  const id = searchParams.get("id");
-  console.log(id);
   const data = await req.json();
-  console.log(data);
 
-  const updateUser = await db.patient.update({
+  const updatedUser = await db.patient.update({
     where: {
-      cpf: data.cpf,
+      id: data.id,
     },
 
     data: {
       name: data.name,
+      dob: data.dob,
+      cpf: data.cpf,
+      sex: data.sex,
+      status: data.status,
+      address: {
+        update: {
+          where: {
+            id: data.addressId,
+          },
+          data: {
+            cep: data.cep,
+            city: data.city,
+            street: data.street,
+            adressNumber: data.adressNumber,
+          },
+        },
+      },
     },
   });
-  return NextResponse.json({ updateUser });
+
+  console.log(updatedUser);
+  return NextResponse.json({ updatedUser });
 }

@@ -1,29 +1,53 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+"use client";
 
-export const emptyUser = { name: "", repos: [], info: {} };
+import { usePatientModel } from "@/app/(patient)/patient.model";
+import { PatientService } from "@/app/services/PatientService/PatienteService.service";
+import { createContext, useContext, useState } from "react";
 
-const UserContext = createContext(null);
+const PatientContext = createContext(null);
 
-export function UserContextProvider({ children }) {
-  const [user, setUser] = useState(emptyUser);
-  const [sortState, setSortState] = useState("DESC");
-  const toggleSorting = () => {
-    setUser({ ...user, repos: user.repos.reverse() });
-    setSortState((prev) => (prev === "DESC" ? "ASC" : "DESC"));
-  };
+export function PatientContextProvider({ children }) {
+  const patientService = new PatientService();
+  const {
+    findUnique,
+    Controller,
+    control,
+    register,
+    errors,
+    handleOnSubmit,
+    handleUpdate,
+    isSubmitting,
+    populateEditForm,
+    isLoading,
+    patients,
+  } = usePatientModel(patientService);
 
   return (
-    <UserContext.Provider value={{ user, setUser, toggleSorting, sortState }}>
+    <PatientContext.Provider
+      value={{
+        findUnique,
+        Controller,
+        control,
+        register,
+        errors,
+        handleOnSubmit,
+        handleUpdate,
+        isSubmitting,
+        isLoading,
+        patients,
+        populateEditForm,
+      }}
+    >
       {children}
-    </UserContext.Provider>
+    </PatientContext.Provider>
   );
 }
 
-export function useUserContext() {
-  const context = useContext(UserContext);
+export function usePatientContext() {
+  const context = useContext(PatientContext);
 
   if (!context) {
-    throw Error("UserContext error");
+    throw Error("PatientContext error");
   }
 
   return context;

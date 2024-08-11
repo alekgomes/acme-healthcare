@@ -3,28 +3,28 @@ import PacientsList from "@/components/pacient-list";
 
 type PatientViewProps = {
   filterFn: (query: any) => void;
-  filteredPatients: any;
+  patients: any;
   Controller: any;
   control: any;
+  isLoading: boolean;
 };
 
 export function PatientView({
   filterFn,
-  filteredPatients,
+  patients,
   Controller,
   control,
+  isLoading,
 }: PatientViewProps) {
-  const { isLoadingQuery, patients } = filteredPatients;
-
   return (
     <main className="flex flex-col items-center">
       <FormQuery
         filterFn={filterFn}
         Controller={Controller}
         control={control}
-        isLoading={isLoadingQuery}
+        isLoading={isLoading}
       />
-      <PacientsList filteredPatients={patients} />
+      <PacientsList patients={patients} />
     </main>
   );
 }

@@ -2,21 +2,23 @@
 import { PatientService } from "@/app/services/PatientService/PatienteService.service";
 import { usePatientModel } from "../patient.model";
 import RegisterView from "./register.view";
-import { UserContextProvider } from "@/contexts/patientContext";
+import {
+  PatientContextProvider,
+  usePatientContext,
+} from "@/contexts/patientContext";
 
 function RegisterPage() {
-  const patientService = new PatientService();
   const {
     register,
-    handleOnSubmit,
     errors,
+    handleOnSubmit,
     Controller,
     control,
     isSubmitting,
-  } = usePatientModel(patientService);
+  } = usePatientContext();
 
   return (
-    <UserContextProvider>
+    <PatientContextProvider>
       <RegisterView
         register={register}
         errors={errors}
@@ -25,7 +27,7 @@ function RegisterPage() {
         control={control}
         isSubmitting={isSubmitting}
       />
-    </UserContextProvider>
+    </PatientContextProvider>
   );
 }
 

@@ -1,23 +1,25 @@
 "use client";
 
+import { useEffect } from "react";
 import { PatientView } from "./patient.view";
-import { usePatientModel } from "./patient.model";
-import { PatientService } from "../services/PatientService/PatienteService.service";
-import { UserContextProvider } from "@/contexts/patientContext";
+import {
+  PatientContextProvider,
+  usePatientContext,
+} from "@/contexts/patientContext";
 
 export default function Home() {
-  const patientService = new PatientService();
-  const { findUnique, queryState, Controller, control } =
-    usePatientModel(patientService);
+  const { findUnique, Controller, control, patients, isLoading } =
+    usePatientContext();
 
   return (
-    <UserContextProvider>
+    <PatientContextProvider>
       <PatientView
         filterFn={findUnique}
-        filteredPatients={queryState}
+        patients={patients}
+        isLoading={isLoading}
         Controller={Controller}
         control={control}
       />
-    </UserContextProvider>
+    </PatientContextProvider>
   );
 }

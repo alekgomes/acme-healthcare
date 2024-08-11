@@ -53,23 +53,41 @@ export const PacientForm = ({
             </legend>
             <div className="space-y-2 ">
               <Label htmlFor="name">Nome Completo</Label>
-              <Input
-                id="name"
-                placeholder="João Gomes"
-                {...register("name")}
-                aria-required
+
+              <Controller
+                control={control}
+                name="name"
+                render={({ field: { onChange, onBlur, value } }: any) => (
+                  <Input
+                    id="name"
+                    type="text"
+                    placeholder="João Gomes"
+                    aria-required
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
               />
+
               <ErrorMessage errors={errors} fieldName="name" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="dob">Data de nascimento</Label>
-              <Input
-                id="dob"
-                type="date"
-                placeholder="Data de nascimento"
-                {...register("dob")}
-                aria-required
+              <Controller
+                control={control}
+                name="dob"
+                render={({ field: { onChange, onBlur, value } }: any) => (
+                  <Input
+                    id="dob"
+                    type="date"
+                    placeholder="Data de nascimento"
+                    aria-required
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
               />
+
               <ErrorMessage errors={errors} fieldName="dob" />
             </div>
             <div className="space-y-2">
@@ -105,6 +123,7 @@ export const PacientForm = ({
                     onValueChange={onChange}
                     defaultValue={value}
                     value={value}
+                    name="sex"
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Sexo" />
@@ -130,7 +149,7 @@ export const PacientForm = ({
                 name="cep"
                 render={({ field: { onChange, onBlur, value } }: any) => (
                   <Input
-                    id="cpf"
+                    id="cep"
                     type="text"
                     placeholder="00000-000"
                     aria-required
@@ -148,34 +167,64 @@ export const PacientForm = ({
               <ErrorMessage errors={errors} fieldName="cep" />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="city">CIdade</Label>
-              <Input
-                id="city"
-                type="text"
-                {...register("city")}
-                aria-required
+              <Label htmlFor="city">Cidade</Label>
+              <Controller
+                control={control}
+                name="city"
+                render={({ field: { onChange, onBlur, value } }: any) => (
+                  <Input
+                    id="city"
+                    type="text"
+                    aria-required
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
               />
               <ErrorMessage errors={errors} fieldName="city" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="street">Logradouro</Label>
-              <Input
+              <Controller
+                control={control}
+                name="street"
+                render={({ field: { onChange, onBlur, value } }: any) => (
+                  <Input
+                    id="street"
+                    type="text"
+                    placeholder="123"
+                    aria-required
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
+              />
+
+              {/* <Input
                 id="street"
                 type="text"
                 {...register("street")}
                 aria-required
-              />
+              /> */}
               <ErrorMessage errors={errors} fieldName="street" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="adressNumber">Número</Label>
-              <Input
-                id="adressNumber"
-                type="text"
-                {...register("adressNumber")}
-                placeholder="123"
-                aria-required
+              <Controller
+                control={control}
+                name="adressNumber"
+                render={({ field: { onChange, onBlur, value } }: any) => (
+                  <Input
+                    id="adressNumber"
+                    type="text"
+                    placeholder="123"
+                    aria-required
+                    value={value}
+                    onChange={onChange}
+                  />
+                )}
               />
+
               <ErrorMessage errors={errors} fieldName="adressNumber" />
             </div>
           </fieldset>

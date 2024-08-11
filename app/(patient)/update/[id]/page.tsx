@@ -1,38 +1,52 @@
 "use client";
-import { PatientService } from "@/app/services/PatientService/PatienteService.service";
-import { usePatientModel } from "../../patient.model";
+
+import { useEffect } from "react";
 import UpdateView from "./update.view";
-import { UserContextProvider } from "@/contexts/patientContext";
+import {
+  PatientContextProvider,
+  usePatientContext,
+} from "@/contexts/patientContext";
 
 function UpdatePage({ params }: any) {
-  const patientService = new PatientService();
   const {
     register,
-    handleOnSubmit,
     errors,
     Controller,
     control,
     isSubmitting,
-    findAndUpdateFormState,
     handleUpdate,
-  } = usePatientModel(patientService);
+    patients,
+    populateEditForm,
+  } = usePatientContext();
 
-  console.log(params);
+  let currentPatient = patients as any | null | undefined;
+  currentPatient = currentPatient.find(
+    (patient: any) => patient.id == params.id
+  );
 
-  findAndUpdateFormState(params);
+  const handleUpdateWithId = handleUpdate({
+    id: currentPatient.id,
+    addressId: currentPatient.addressId,
+  });
+
+  console.log("currentPatient", currentPatient);
+
+  useEffect(() => {
+    populateEditForm(currentPatient);
+  }, [patients, currentPatient]);
 
   return (
-    <UserContextProvider>
+    <PatientContextProvider>
       <UpdateView
         register={register}
         errors={errors}
-        handleOnSubmit={handleOnSubmit}
+        handleOnSubmit={handleUpdateWithId}
         Controller={Controller}
         control={control}
         isSubmitting={isSubmitting}
-        handleUpdate={handleUpdate}
+        currentPatient={currentPatient}
       />
-    </UserContextProvider>
+    </PatientContextProvider>
   );
 }
 

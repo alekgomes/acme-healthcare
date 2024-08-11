@@ -5,7 +5,7 @@ import { PacientForm } from "@/components/form/register";
 export default function UpdateView({
   register,
   errors,
-  handleUpdate,
+  handleOnSubmit,
   Controller,
   control,
   isSubmitting,
@@ -15,7 +15,7 @@ export default function UpdateView({
       <PacientForm
         register={register}
         errors={errors}
-        handleOnSubmit={handleUpdate}
+        handleOnSubmit={handleOnSubmit}
         Controller={Controller}
         control={control}
         isSubmitting={isSubmitting}

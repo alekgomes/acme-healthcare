@@ -14,7 +14,7 @@ export class PatientService implements IPatientService {
     return res;
   }
 
-  async FindUnique(query: any): Promise<any> {
+  async FindByQuery(query: any): Promise<any> {
     const res = await axios.get("/api/patient", { params: query });
     return res;
   }

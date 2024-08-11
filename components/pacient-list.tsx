@@ -3,12 +3,10 @@ import { calcAge, sexEnums } from "@/lib/utils";
 import Link from "next/link";
 
 type PacientsListProps = {
-  filteredPatients: any;
+  patients: any;
 };
 
-export default function PacientsList({ filteredPatients }: PacientsListProps) {
-  const { patients } = filteredPatients;
-
+export default function PacientsList({ patients }: PacientsListProps) {
   if (patients?.length == 0) {
     return <p>Nenhum resultado para essa busca...</p>;
   }
@@ -26,12 +24,9 @@ export default function PacientsList({ filteredPatients }: PacientsListProps) {
                 <div className="flex gap-2">
                   <Link href={`/update/${patient.id}`}>
                     <Button variant="outline" size="sm">
-                      Edit
+                      Editar
                     </Button>
                   </Link>
-                  <Button variant="outline" size="sm">
-                    Change Status
-                  </Button>
                 </div>
               </div>
               <p className="text-muted-foreground">
