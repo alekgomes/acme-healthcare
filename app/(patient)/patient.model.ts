@@ -3,7 +3,8 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { populate } from "@/lib/utils";
 
 const formSchema = z.object({
   name: z
@@ -36,20 +37,50 @@ const formSchema = z.object({
 export type PatientSchema = z.infer<typeof formSchema>;
 
 export function usePatientModel(service: IPatientService) {
+  const [queryState, setQueryState] = useState<any>({
+    isLoadingQuery: false,
+    patients: [],
+  });
+
+  const [currentPatient, setCurrentPatient] = useState(undefined);
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     setError,
-
     control,
+    setValue,
   } = useForm<PatientSchema>({
     resolver: zodResolver(formSchema),
   });
 
-  const findUnique = (query: any) => {
-    service.FindUnique(query);
+  const findUnique = async (query: any) => {
+    setQueryState((prevState: any) => ({ ...prevState, isLoadingQuery: true }));
+    const { data } = await service.FindUnique(query);
+    setQueryState({ patients: data, isLoadingQuery: false });
   };
+
+  const findAndUpdateFormState = async (id: any) => {
+    const { data } = await service.FindUnique(id);
+    const { patient } = data;
+    Object.entries(patient).map((entry) => populate(entry, setValue));
+  };
+
+  const updatePacient = async (params: any) => {
+    await service.Update(params);
+  };
+
+  const handleUpdate = handleSubmit(async (data: any) => {
+    const res = await service.Update(data);
+    if (res.data.status === "error") {
+      if (res.data.message.includes("CPF já cadastrado")) {
+        setError("cpf", { message: res.data.message });
+      }
+    } else {
+      console.log("Paciente atualizado com sucesso:", res);
+    }
+  });
 
   const handleOnSubmit = handleSubmit(async (data: PatientSchema) => {
     const res = await service.Create(data);
@@ -70,5 +101,8 @@ export function usePatientModel(service: IPatientService) {
     isSubmitting,
     Controller,
     control,
+    queryState,
+    findAndUpdateFormState,
+    handleUpdate,
   };
 }

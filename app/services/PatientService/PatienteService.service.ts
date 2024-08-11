@@ -9,11 +9,13 @@ export class PatientService implements IPatientService {
     return res;
   }
 
-  async FindAll(): Promise<any[]> {
-    return Promise.resolve([{}]);
+  async Update(data: any): Promise<any> {
+    const res = await axios.put("/api/patient", data);
+    return res;
   }
 
-  async FindUnique(): Promise<any> {
-    return Promise.resolve({});
+  async FindUnique(query: any): Promise<any> {
+    const res = await axios.get("/api/patient", { params: query });
+    return res;
   }
 }
