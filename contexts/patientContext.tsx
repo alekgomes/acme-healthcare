@@ -20,6 +20,7 @@ export function PatientContextProvider({ children }) {
     populateEditForm,
     isLoading,
     patients,
+    apiStatus,
   } = usePatientModel(patientService);
 
   return (
@@ -36,6 +37,7 @@ export function PatientContextProvider({ children }) {
         isLoading,
         patients,
         populateEditForm,
+        apiStatus,
       }}
     >
       {children}

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { PatientContextProvider } from "@/contexts/patientContext";
+import { Logo } from "@/components/logo";
+import { Footer } from "@/components/footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +20,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <PatientContextProvider>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          <nav className="fixed z-50 top-0 px-4 w-full h-14 border-b shadow-sm bg-white flex items-center">
+            <Logo />
+          </nav>
+          <main>{children}</main>
+          <Footer />
+        </body>
       </PatientContextProvider>
     </html>
   );

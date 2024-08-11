@@ -99,7 +99,12 @@ export async function POST(req: NextRequest, res: NextResponse) {
     });
 
     return NextResponse.json({
-      patient: newPatient,
+      status: "success",
+      message: {
+        title: "Bem vindo!",
+        description: `Paciente ${newPatient.name} criado com sucesso.`,
+      },
+      payload: newPatient,
     });
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {

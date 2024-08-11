@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cepMask, cpfMask } from "@/lib/utils";
 import { ErrorMessage } from "./error-message";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 
 type PacientFormProps = {
   handleOnSubmit: any;
@@ -27,15 +28,16 @@ type PacientFormProps = {
   control: any;
   Controller: any;
   isSubmitting: any;
+  apiStatus: any;
 };
 
 export const PacientForm = ({
   handleOnSubmit,
-  register,
   errors,
   control,
   Controller,
   isSubmitting,
+  apiStatus,
 }: PacientFormProps) => {
   return (
     <form onSubmit={handleOnSubmit}>
@@ -119,12 +121,7 @@ export const PacientForm = ({
                 control={control}
                 name="sex"
                 render={({ field: { onChange, onBlur, value } }: any) => (
-                  <Select
-                    onValueChange={onChange}
-                    defaultValue={value}
-                    value={value}
-                    name="sex"
-                  >
+                  <Select onValueChange={onChange} value={value} name="sex">
                     <SelectTrigger>
                       <SelectValue placeholder="Sexo" />
                     </SelectTrigger>
@@ -176,6 +173,7 @@ export const PacientForm = ({
                     id="city"
                     type="text"
                     aria-required
+                    placeholder="São Paulo"
                     value={value}
                     onChange={onChange}
                   />
@@ -192,20 +190,13 @@ export const PacientForm = ({
                   <Input
                     id="street"
                     type="text"
-                    placeholder="123"
+                    placeholder="Rua das Flores"
                     aria-required
                     value={value}
                     onChange={onChange}
                   />
                 )}
               />
-
-              {/* <Input
-                id="street"
-                type="text"
-                {...register("street")}
-                aria-required
-              /> */}
               <ErrorMessage errors={errors} fieldName="street" />
             </div>
             <div className="space-y-2">
@@ -224,7 +215,6 @@ export const PacientForm = ({
                   />
                 )}
               />
-
               <ErrorMessage errors={errors} fieldName="adressNumber" />
             </div>
           </fieldset>
@@ -241,7 +231,6 @@ export const PacientForm = ({
                   name="status"
                   className="flex mt-2"
                   onValueChange={onChange}
-                  defaultValue={value}
                   value={value}
                 >
                   <div className="flex items-center space-x-2 ">
@@ -258,8 +247,21 @@ export const PacientForm = ({
 
             <ErrorMessage errors={errors} fieldName="status" />
           </fieldset>
+          {apiStatus.status ? (
+            <Alert
+              className=""
+              variant={`${
+                apiStatus.status == "error" ? "destructive" : "creation"
+              }`}
+            >
+              <AlertTitle>{apiStatus.message?.title}</AlertTitle>
+              <AlertDescription>
+                {apiStatus.message?.description}
+              </AlertDescription>
+            </Alert>
+          ) : null}
 
-          <Button className="w-full" type="submit" disabled={isSubmitting}>
+          <Button className="w-full mt-3" type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Cadastrando..." : "Cadastrar"}
           </Button>
         </CardContent>

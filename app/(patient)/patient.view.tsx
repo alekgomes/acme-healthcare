@@ -1,5 +1,7 @@
 import { FormQuery } from "@/components/form/form-query";
 import PacientsList from "@/components/pacient-list";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type PatientViewProps = {
   filterFn: (query: any) => void;
@@ -17,7 +19,12 @@ export function PatientView({
   isLoading,
 }: PatientViewProps) {
   return (
-    <main className="flex flex-col items-center">
+    <section className="flex flex-col items-center pt-36">
+      <Link href="/register">
+        <Button>Cadastrar novo paciente</Button>
+      </Link>
+      <p>ou</p>
+      <p>Pesquise por um paciente já cadastrado:</p>
       <FormQuery
         filterFn={filterFn}
         Controller={Controller}
@@ -25,6 +32,6 @@ export function PatientView({
         isLoading={isLoading}
       />
       <PacientsList patients={patients} />
-    </main>
+    </section>
   );
 }

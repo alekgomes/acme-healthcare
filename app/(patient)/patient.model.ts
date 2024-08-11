@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { z } from "zod";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { populate } from "@/lib/utils";
 
 const formSchema = z.object({
@@ -34,6 +34,17 @@ const formSchema = z.object({
   }),
 });
 
+const defaultFields = {
+  name: "",
+  dob: "",
+  cpf: "",
+  sex: "",
+  cep: "",
+  city: "",
+  street: "",
+  adressNumber: "",
+};
+
 export type PatientSchema = z.infer<typeof formSchema>;
 
 export function usePatientModel(service: IPatientService) {
@@ -44,27 +55,19 @@ export function usePatientModel(service: IPatientService) {
     setError,
     control,
     setValue,
+    reset,
   } = useForm<PatientSchema>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      dob: new Date(),
-      cpf: "",
-      status: "ACTIVE",
-      sex: "MASC",
-      cep: "",
-      city: "",
-      street: "",
-      adressNumber: "",
-    },
   });
 
   const [isLoading, setIsLoading] = useState<any>(false);
   const [patients, setPatients] = useState<any[] | null>(null);
+  const [apiStatus, setApiStatus] = useState({ status: null, message: null });
 
   const findUnique = async (query: any) => {
     setIsLoading(true);
     const { data } = await service.FindByQuery(query);
+
     setPatients(data.patients);
     setIsLoading(false);
     return data.patients;
@@ -77,11 +80,13 @@ export function usePatientModel(service: IPatientService) {
   const handleUpdate = (ids: any) =>
     handleSubmit(async (data: any) => {
       const res = await service.Update({ ...data, ...ids });
-      if (res.data.status === "error") {
-        if (res.data.message.includes("CPF já cadastrado")) {
-          setError("cpf", { message: res.data.message });
-        }
+      if (
+        res.data.status === "error" &&
+        res.data.message.includes("CPF já cadastrado")
+      ) {
+        setError("cpf", { message: res.data.message });
       } else {
+        setApiStatus(res.data);
         console.log("Paciente atualizado com sucesso:", res);
       }
 
@@ -101,7 +106,13 @@ export function usePatientModel(service: IPatientService) {
         setError("cpf", { message: res.data.message });
       }
     } else {
+      const { patient } = res.data;
+      setPatients((prevState) =>
+        prevState ? [...prevState, patient] : [patient]
+      );
+      setApiStatus(res.data);
       console.log("Paciente criado com sucesso:", res);
+      reset(defaultFields);
     }
   });
 
@@ -117,6 +128,7 @@ export function usePatientModel(service: IPatientService) {
     populateEditForm,
     isLoading,
     patients,
+    apiStatus,
   };
 }
 

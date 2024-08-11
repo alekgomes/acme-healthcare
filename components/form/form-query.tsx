@@ -55,7 +55,7 @@ export const FormQuery = ({
     <form onSubmit={onSubmit}>
       <Card className="w-full max-w-xl">
         <CardHeader>
-          <CardTitle>Patients</CardTitle>
+          <CardTitle>Pacientes</CardTitle>
           <CardDescription>
             Procure pacientes pelo nome, CPF ou status.
           </CardDescription>
@@ -98,7 +98,7 @@ export const FormQuery = ({
             <Label htmlFor="status">Status</Label>
             <Select name="status" onValueChange={onValueChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Escolha um status" />
+                <SelectValue placeholder="Filtre por status" />
               </SelectTrigger>
               <SelectContent>
                 {/* <SelectItem value="null">Escolha um status</SelectItem> */}

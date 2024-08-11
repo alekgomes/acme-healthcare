@@ -15,6 +15,7 @@ function RegisterPage() {
     Controller,
     control,
     isSubmitting,
+    apiStatus,
   } = usePatientContext();
 
   return (
@@ -26,6 +27,7 @@ function RegisterPage() {
         Controller={Controller}
         control={control}
         isSubmitting={isSubmitting}
+        apiStatus={apiStatus}
       />
     </PatientContextProvider>
   );

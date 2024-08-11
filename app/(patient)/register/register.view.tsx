@@ -1,6 +1,7 @@
 "use client";
 
 import { PacientForm } from "@/components/form/register";
+import { Button } from "@/components/ui/button";
 
 export default function RegisterView({
   register,
@@ -9,6 +10,7 @@ export default function RegisterView({
   Controller,
   control,
   isSubmitting,
+  apiStatus,
 }: any) {
   return (
     <section className="min-h-screen flex justify-center items-center">
@@ -19,6 +21,7 @@ export default function RegisterView({
         Controller={Controller}
         control={control}
         isSubmitting={isSubmitting}
+        apiStatus={apiStatus}
       />
     </section>
   );
