@@ -3,6 +3,7 @@
 import { usePatientModel } from "@/app/(patient)/patient.model";
 import { PatientService } from "@/app/services/PatientService/PatienteService.service";
 import { createContext, useContext } from "react";
+import { type PatientSchema } from "@/app/(patient)/patient.model";
 
 type ContextProps = {
   findUnique: any;
@@ -18,6 +19,7 @@ type ContextProps = {
   populateEditForm: any;
   apiStatus: any;
   setApiStatus: any;
+  reset: (schema: any) => void;
 };
 
 const PatientContext = createContext<ContextProps | null>(null);

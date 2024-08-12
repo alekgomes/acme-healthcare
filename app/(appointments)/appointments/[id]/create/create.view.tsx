@@ -1,4 +1,14 @@
 import { AppointmentForm } from "@/components/form/appointment-form";
+import { ApiStatus } from "@/types";
+
+type CreateAppointmentViewProps = {
+  Controller: any;
+  control: any;
+  errors: any;
+  handleOnSubmit: any;
+  isLoading: boolean;
+  apiStatus: ApiStatus;
+};
 
 export default function CreateAppointmentView({
   Controller,
@@ -7,7 +17,7 @@ export default function CreateAppointmentView({
   handleOnSubmit,
   isLoading,
   apiStatus,
-}: any) {
+}: CreateAppointmentViewProps) {
   return (
     <section className="flex justify-center items-center ">
       <AppointmentForm

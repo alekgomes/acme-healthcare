@@ -3,16 +3,21 @@
 import { useAppointmentModel } from "@/app/(appointments)/appointments/appointments.model";
 import { AppointmentService } from "@/app/services/AppointmentService/AppointmentService.service";
 import { createContext, useContext } from "react";
+import { Patient, PatientRegister } from "@prisma/client";
+import { ApiStatus } from "@/types";
 
 type ContextProps = {
-  getAppointments: any;
-  isLoading: any;
+  getAppointments: (patientId: Partial<Patient>) => Promise<PatientRegister[]>;
+  isLoading: boolean;
   Controller: any;
   control: any;
   errors: any;
-  handleOnSubmit: any;
-  patient: any;
-  populateEditForm: any;
+  handleOnSubmit: (id: any) => void;
+  patient: (Patient & { registers: PatientRegister[] }) | any;
+  isSubmitting: boolean;
+  apiStatus: ApiStatus;
+  populateEditForm: (appointment: PatientRegister | any) => void;
+  handleUpdate: (id: any) => void;
 };
 
 const AppointmentContext = createContext<ContextProps | null>(null);

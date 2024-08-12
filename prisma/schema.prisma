@@ -33,7 +33,7 @@ model PatientRegister {
   patient         Patient   @relation(fields: [patientId], references: [id])
   patientId       Int       
   date            DateTime  
-  description     String?
+  description     String
   status          Status
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt

@@ -1,10 +1,12 @@
-import { IPatientService } from "@/app/services/PatientService/IPatienteService";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-
 import { z } from "zod";
 import { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { Patient, PatientRegister } from "@prisma/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import { IPatientService } from "@/app/services/PatientService/IPatienteService";
 import { populate } from "@/lib/utils";
+import { ApiStatus } from "@/types";
 
 const formSchema = z.object({
   name: z
@@ -38,17 +40,6 @@ const formSchema = z.object({
   }),
 });
 
-const defaultFields = {
-  name: "",
-  dob: "",
-  cpf: "",
-  sex: "",
-  cep: "",
-  city: "",
-  street: "",
-  adressNumber: "",
-};
-
 export type PatientSchema = z.infer<typeof formSchema>;
 
 export function usePatientModel(service: IPatientService) {
@@ -65,11 +56,14 @@ export function usePatientModel(service: IPatientService) {
     resolver: zodResolver(formSchema),
   });
 
-  const [isLoading, setIsLoading] = useState<any>(false);
-  const [patients, setPatients] = useState<any[] | null>(null);
-  const [apiStatus, setApiStatus] = useState({ status: null, message: null });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [patients, setPatients] = useState<Patient[] | null>(null);
+  const [apiStatus, setApiStatus] = useState<ApiStatus>({
+    status: null,
+    message: null,
+  });
 
-  const findUnique = async (query: any) => {
+  const findUnique = async (query: Partial<Patient>): Promise<Patient[]> => {
     clearErrors();
     setIsLoading(true);
     const { data } = await service.FindByQuery(query);
@@ -79,13 +73,13 @@ export function usePatientModel(service: IPatientService) {
     return data.patients;
   };
 
-  const populateEditForm = (currentPatient: any) => {
+  const populateEditForm = (currentPatient: Patient): void => {
     clearErrors();
     Object.entries(currentPatient).map((entry) => populate(entry, setValue));
   };
 
-  const handleUpdate = (ids: any) =>
-    handleSubmit(async (data: any) => {
+  const handleUpdate = (ids: Partial<Patient>) =>
+    handleSubmit(async (data: PatientSchema) => {
       const res = await service.Update({ ...data, ...ids });
       if (
         res.data.status === "error" &&
@@ -138,4 +132,3 @@ export function usePatientModel(service: IPatientService) {
     reset,
   };
 }
-

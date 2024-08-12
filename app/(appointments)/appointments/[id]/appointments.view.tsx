@@ -4,14 +4,14 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { calcAge, dateFormatter } from "@/lib/utils";
+import { Patient, PatientRegister } from "@prisma/client";
 import Link from "next/link";
-import { register } from "module";
 
 type PatientViewProps = {
   getAppointments: any;
   params: any;
   isLoading: boolean;
-  patient: any;
+  patient: Patient;
   Controller: any;
   control: any;
   errors: any;
