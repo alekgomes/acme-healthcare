@@ -9,37 +9,12 @@ export async function GET(req: NextRequest, res: NextResponse) {
   const cpf = searchParams.get("cpf") || undefined;
   const name = searchParams.get("name") || undefined;
   const status = searchParams.get("status") as Status | undefined;
-  const id = Number(searchParams.get("id")) || undefined;
-
-  // Se possuir id, retornar único paciente
-  if (id) {
-    try {
-      const patients = await db.patient.findUnique({
-        where: { id: id },
-        include: {
-          address: true,
-        },
-      });
-
-      console.log(patients);
-      return NextResponse.json({ patient: patients });
-    } catch (error) {
-      console.error(error);
-      return NextResponse.json(
-        {
-          status: "error",
-          message: "Erro ao pesquisar paciente",
-        },
-        { status: 500 }
-      );
-    }
-  }
 
   // Criar um objeto de condições para o filtro dinamicamente
   const conditions = {};
 
   if (cpf) {
-    Object.assign(conditions, { cpf: { contains: cpf } });
+    Object.assign(conditions, { cpf: { equals: cpf } });
   }
 
   if (name) {
@@ -52,8 +27,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
     Object.assign(conditions, { status: { equals: status } });
   }
 
-  console.log(conditions);
-
   try {
     const patients = await db.patient.findMany({
       where: conditions,
@@ -61,8 +34,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
         address: true,
       },
     });
-
-    console.log(patients);
 
     return NextResponse.json({ patients: patients });
   } catch (error) {
@@ -119,8 +90,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
         );
       }
     }
-
-    console.log({ error });
   }
 }
 
@@ -154,6 +123,12 @@ export async function PUT(req: NextRequest, res: NextResponse) {
     },
   });
 
-  console.log(updatedUser);
-  return NextResponse.json({ updatedUser });
+  return NextResponse.json({
+    status: "success",
+    message: {
+      title: "Cadastro atualizado!",
+      description: `Paciente ${updatedUser.name} atualizado com sucesso.`,
+    },
+    payload: updatedUser,
+  });
 }

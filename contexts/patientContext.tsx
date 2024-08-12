@@ -2,11 +2,31 @@
 
 import { usePatientModel } from "@/app/(patient)/patient.model";
 import { PatientService } from "@/app/services/PatientService/PatienteService.service";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext } from "react";
 
-const PatientContext = createContext(null);
+type ContextProps = {
+  findUnique: any;
+  Controller: any;
+  control: any;
+  register: any;
+  errors: any;
+  handleOnSubmit: any;
+  handleUpdate: any;
+  isSubmitting: any;
+  isLoading: any;
+  patients: any;
+  populateEditForm: any;
+  apiStatus: any;
+  setApiStatus: any;
+};
 
-export function PatientContextProvider({ children }) {
+const PatientContext = createContext<ContextProps | null>(null);
+
+export function PatientContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const patientService = new PatientService();
   const {
     findUnique,
@@ -21,6 +41,8 @@ export function PatientContextProvider({ children }) {
     isLoading,
     patients,
     apiStatus,
+    setApiStatus,
+    reset,
   } = usePatientModel(patientService);
 
   return (
@@ -38,6 +60,8 @@ export function PatientContextProvider({ children }) {
         patients,
         populateEditForm,
         apiStatus,
+        setApiStatus,
+        reset,
       }}
     >
       {children}

@@ -66,11 +66,11 @@ export const PacientForm = ({
                     placeholder="João Gomes"
                     aria-required
                     value={value}
+                    onBlur={onBlur}
                     onChange={onChange}
                   />
                 )}
               />
-
               <ErrorMessage errors={errors} fieldName="name" />
             </div>
             <div className="space-y-2">
@@ -121,7 +121,12 @@ export const PacientForm = ({
                 control={control}
                 name="sex"
                 render={({ field: { onChange, onBlur, value } }: any) => (
-                  <Select onValueChange={onChange} value={value} name="sex">
+                  <Select
+                    onValueChange={onChange}
+                    value={value}
+                    defaultValue={value}
+                    name="sex"
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Sexo" />
                     </SelectTrigger>
@@ -219,7 +224,7 @@ export const PacientForm = ({
             </div>
           </fieldset>
 
-          <fieldset className=" my-5">
+          <fieldset className="my-5">
             <legend className="text-muted-foreground text-sm">Status</legend>
             <Label>Define status inicial do paciente</Label>
 
@@ -247,7 +252,7 @@ export const PacientForm = ({
 
             <ErrorMessage errors={errors} fieldName="status" />
           </fieldset>
-          {apiStatus.status ? (
+          {apiStatus?.status ? (
             <Alert
               className=""
               variant={`${

@@ -19,7 +19,7 @@ export function PatientView({
   isLoading,
 }: PatientViewProps) {
   return (
-    <section className="flex flex-col items-center pt-36">
+    <section className="flex flex-col items-center pt-36 pb-16">
       <Link href="/register">
         <Button>Cadastrar novo paciente</Button>
       </Link>

@@ -33,21 +33,17 @@ export const FormQuery = ({
   isLoading,
 }: FormQueryProps) => {
   const [formState, setFormState] = useState({
-    nome: "",
+    name: "",
     cpf: "",
     status: "",
   });
-
-  const onChange = (event: any) => {
-    const { name, value } = event.target;
-    setFormState({ ...formState, [name]: value });
-  };
 
   const onValueChange = (value: any) =>
     setFormState({ ...formState, status: value });
 
   const onSubmit = (event: any) => {
     event.preventDefault();
+
     filterFn(formState);
   };
 
@@ -68,7 +64,10 @@ export const FormQuery = ({
                 id="name"
                 placeholder="Nome do paciente"
                 name="name"
-                onChange={onChange}
+                onChange={(e) =>
+                  setFormState({ ...formState, name: e.target.value })
+                }
+                value={formState.name}
               />
             </div>
             <div className="space-y-2">
@@ -76,19 +75,19 @@ export const FormQuery = ({
               <Controller
                 control={control}
                 name="cpf"
-                render={({ field: { onChange, onBlur, value } }: any) => (
+                render={({ field: { onBlur, onChange, value } }: any) => (
                   <Input
                     id="cpf"
                     type="text"
                     placeholder="123.456.789-09"
                     aria-required
+                    value={cpfMask(value || "")}
                     onChange={(e) => {
-                      const { value } = e.target;
-                      e.target.value = cpfMask(value);
-                      onChange(e);
+                      const maskedValue = cpfMask(e.target.value);
+                      setFormState({ ...formState, cpf: maskedValue });
+                      onChange(maskedValue);
                     }}
                     onBlur={onBlur}
-                    value={value}
                   />
                 )}
               />
@@ -96,14 +95,29 @@ export const FormQuery = ({
           </div>
           <div className="space-y-2">
             <Label htmlFor="status">Status</Label>
-            <Select name="status" onValueChange={onValueChange}>
+            <Select
+              name="status"
+              onValueChange={onValueChange}
+              value={formState.status}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Filtre por status" />
               </SelectTrigger>
               <SelectContent>
-                {/* <SelectItem value="null">Escolha um status</SelectItem> */}
+                {/* <SelectItem value="">Escolha um status</SelectItem> */}
                 <SelectItem value="ACTIVE">Active</SelectItem>
                 <SelectItem value="INACTIVE">Inactive</SelectItem>
+                <Button
+                  className="w-full px-2"
+                  variant="secondary"
+                  size="sm"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFormState({ ...formState, status: "" });
+                  }}
+                >
+                  Clear
+                </Button>
               </SelectContent>
             </Select>
           </div>

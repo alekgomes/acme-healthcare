@@ -27,8 +27,12 @@ const formSchema = z.object({
     .string({ required_error: "Campo obrigatório" })
     .min(8, { message: "CEP inválido" }),
   city: z.string({ required_error: "Campo obrigatório" }),
-  street: z.string({ required_error: "Campo obrigatório" }),
-  adressNumber: z.string({ required_error: "Campo obrigatório" }),
+  street: z
+    .string({ required_error: "Campo obrigatório" })
+    .min(1, { message: "Campo obrigatório" }),
+  adressNumber: z
+    .string({ required_error: "Campo obrigatório" })
+    .min(1, { message: "Campo obrigatório" }),
   status: z.enum(["ACTIVE", "INACTIVE"], {
     required_error: "Campo obrigatório",
   }),
@@ -56,6 +60,7 @@ export function usePatientModel(service: IPatientService) {
     control,
     setValue,
     reset,
+    clearErrors,
   } = useForm<PatientSchema>({
     resolver: zodResolver(formSchema),
   });
@@ -65,6 +70,7 @@ export function usePatientModel(service: IPatientService) {
   const [apiStatus, setApiStatus] = useState({ status: null, message: null });
 
   const findUnique = async (query: any) => {
+    clearErrors();
     setIsLoading(true);
     const { data } = await service.FindByQuery(query);
 
@@ -74,6 +80,7 @@ export function usePatientModel(service: IPatientService) {
   };
 
   const populateEditForm = (currentPatient: any) => {
+    clearErrors();
     Object.entries(currentPatient).map((entry) => populate(entry, setValue));
   };
 
@@ -90,11 +97,10 @@ export function usePatientModel(service: IPatientService) {
         console.log("Paciente atualizado com sucesso:", res);
       }
 
-      const { updatedUser } = res.data;
-      const newPatients = patients?.filter(
-        (patient) => patient.id !== updatedUser.id
-      );
-      setPatients([...newPatients, updatedUser]);
+      const { payload } = res.data;
+      const newPatients =
+        patients?.filter((patient) => patient.id !== payload.id) || [];
+      setPatients([...newPatients, payload]);
 
       return { res };
     });
@@ -112,7 +118,6 @@ export function usePatientModel(service: IPatientService) {
       );
       setApiStatus(res.data);
       console.log("Paciente criado com sucesso:", res);
-      reset(defaultFields);
     }
   });
 
@@ -129,6 +134,8 @@ export function usePatientModel(service: IPatientService) {
     isLoading,
     patients,
     apiStatus,
+    setApiStatus,
+    reset,
   };
 }
 

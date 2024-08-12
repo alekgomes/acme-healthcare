@@ -9,6 +9,7 @@ export default function UpdateView({
   Controller,
   control,
   isSubmitting,
+  apiStatus,
 }: any) {
   return (
     <section className="min-h-screen flex justify-center items-center">
@@ -19,6 +20,7 @@ export default function UpdateView({
         Controller={Controller}
         control={control}
         isSubmitting={isSubmitting}
+        apiStatus={apiStatus}
       />
     </section>
   );

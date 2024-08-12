@@ -1,11 +1,7 @@
 "use client";
-import { PatientService } from "@/app/services/PatientService/PatienteService.service";
-import { usePatientModel } from "../patient.model";
+import { useEffect } from "react";
 import RegisterView from "./register.view";
-import {
-  PatientContextProvider,
-  usePatientContext,
-} from "@/contexts/patientContext";
+import { usePatientContext } from "@/contexts/patientContext";
 
 function RegisterPage() {
   const {
@@ -16,20 +12,33 @@ function RegisterPage() {
     control,
     isSubmitting,
     apiStatus,
+    reset,
   } = usePatientContext();
 
+  useEffect(() => {
+    reset({
+      name: "",
+      dob: "",
+      cpf: "",
+      sex: "",
+      cep: "",
+      city: "",
+      street: "",
+      status: "",
+      adressNumber: "",
+    });
+  }, []);
+
   return (
-    <PatientContextProvider>
-      <RegisterView
-        register={register}
-        errors={errors}
-        handleOnSubmit={handleOnSubmit}
-        Controller={Controller}
-        control={control}
-        isSubmitting={isSubmitting}
-        apiStatus={apiStatus}
-      />
-    </PatientContextProvider>
+    <RegisterView
+      register={register}
+      errors={errors}
+      handleOnSubmit={handleOnSubmit}
+      Controller={Controller}
+      control={control}
+      isSubmitting={isSubmitting}
+      apiStatus={apiStatus}
+    />
   );
 }
 

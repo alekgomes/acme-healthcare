@@ -10,9 +10,6 @@ export default function PacientsList({ patients }: PacientsListProps) {
   if (patients?.length == 0) {
     return <p>Nenhum resultado para essa busca...</p>;
   }
-
-  console.log({ patients });
-
   return (
     <div className="container mx-auto py-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -25,6 +22,11 @@ export default function PacientsList({ patients }: PacientsListProps) {
                   <Link href={`/update/${patient.id}`}>
                     <Button variant="outline" size="sm">
                       Editar
+                    </Button>
+                  </Link>
+                  <Link href={`/appointments/${patient.id}`}>
+                    <Button variant="outline" size="sm">
+                      Consultas
                     </Button>
                   </Link>
                 </div>

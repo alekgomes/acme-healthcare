@@ -1,7 +1,7 @@
 "use client";
 
 import { PacientForm } from "@/components/form/register";
-import { Button } from "@/components/ui/button";
+
 
 export default function RegisterView({
   register,

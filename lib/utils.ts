@@ -14,6 +14,7 @@ export const cpfMask = (value: string) => {
     .replace(/(-\d{2})\d+?$/, "$1");
 };
 
+
 export const cepMask = (value: string) => {
   return value.replace(/\D/g, "").replace(/(\d{5})(\d)/, "$1-$2");
 };
@@ -39,7 +40,6 @@ export const sexEnums = (sex: string): string => {
   return "";
 };
 
-
 export const populate = (entry: any, cb: any) => {
   if (Object.entries(entry[1]).length > 1) {
     Object.entries(entry[1]).map((entry) => populate(entry, cb));
@@ -52,4 +52,15 @@ export const populate = (entry: any, cb: any) => {
   } else {
     cb(entry[0], entry[1]);
   }
+};
+
+export const dateFormatter = (dateString: Date) => {
+  return new Date(dateString).toLocaleString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  });
 };

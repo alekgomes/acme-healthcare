@@ -2,10 +2,7 @@
 
 import { useEffect } from "react";
 import UpdateView from "./update.view";
-import {
-  PatientContextProvider,
-  usePatientContext,
-} from "@/contexts/patientContext";
+import { usePatientContext } from "@/contexts/patientContext";
 
 function UpdatePage({ params }: any) {
   const {
@@ -17,10 +14,11 @@ function UpdatePage({ params }: any) {
     handleUpdate,
     patients,
     populateEditForm,
+    apiStatus,
   } = usePatientContext();
 
   let currentPatient = patients as any | null | undefined;
-  currentPatient = currentPatient.find(
+  currentPatient = currentPatient?.find(
     (patient: any) => patient.id == params.id
   );
 
@@ -29,24 +27,20 @@ function UpdatePage({ params }: any) {
     addressId: currentPatient.addressId,
   });
 
-  console.log("currentPatient", currentPatient);
-
   useEffect(() => {
     populateEditForm(currentPatient);
-  }, [patients, currentPatient]);
+  }, [currentPatient.id]);
 
   return (
-    <PatientContextProvider>
-      <UpdateView
-        register={register}
-        errors={errors}
-        handleOnSubmit={handleUpdateWithId}
-        Controller={Controller}
-        control={control}
-        isSubmitting={isSubmitting}
-        currentPatient={currentPatient}
-      />
-    </PatientContextProvider>
+    <UpdateView
+      register={register}
+      errors={errors}
+      handleOnSubmit={handleUpdateWithId}
+      Controller={Controller}
+      control={control}
+      isSubmitting={isSubmitting}
+      apiStatus={apiStatus}
+    />
   );
 }
 
