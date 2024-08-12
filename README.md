@@ -1,36 +1,29 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Acme Healthcare
 
-## Getting Started
+Projeto de exercício técnico.
 
-First, run the development server:
+### Techstack
+ Para concluir os requisitos, foram utilizadas as seguinte tecnologias:
+ - Framework: NextJS
+ - UI: ShadCN; Tailwind
+ - Persistência: Supabase; PrismaORM
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Arquitetura e organização
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+O projeto aplica o padrão de arquitetura MVVM. 
+Na camada da view foi utilizado ShadCN e conjunt com Tailwind para definir o visual e é identificada pelos arquivos `*.view.tsx`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+A camada de Model é responsável pela validação dos formulários e regras de negócio (não pode cadastrar o mesmo cpf, por exemplo) e são os arquivos `*.model.ts`. A Model também é a camada do dados que serão apresentados na View, de forma que a View é uma função da Model.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+A camada ModelView é reponsável pela comunicação com serviços, comunicação entre as camadas e implementação de interfaces.
 
-## Learn More
+O projeto usa React Context para compartilhar funcionalidades e permitir que haja apenas uma instância de model.
 
-To learn more about Next.js, take a look at the following resources:
+A seguir uma imagem exempleficando as relações entre as camadas:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+![IMAGEM](./images/exemplo.jpeg)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### Rodando o projeto localmente
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Para executar o projeto, clone ele na sua máquina.
+Depois, criei um arquivo `.env` na raiz do projeto e adicione as chaves enviadas por e-mail.
