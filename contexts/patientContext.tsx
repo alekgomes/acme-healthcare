@@ -3,7 +3,7 @@
 import { usePatientModel } from "@/app/(patient)/patient.model";
 import { PatientService } from "@/app/services/PatientService/PatienteService.service";
 import { createContext, useContext } from "react";
-import { type PatientSchema } from "@/app/(patient)/patient.model";
+
 
 type ContextProps = {
   findUnique: any;
